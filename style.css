@@ -1,0 +1,84 @@
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#editor-container {
+    display: flex;
+    width: 100%;
+}
+
+#outline {
+    width: 20%;
+    background-color: #f4f4f4;
+    border-right: 1px solid #ccc;
+    padding: 10px;
+    overflow-y: auto;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+}
+
+#main-editor {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+header {
+    background-color: #f4f4f4;
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+#editor-preview-container {
+    display: flex;
+    flex-grow: 1;
+    width: 100%;
+    position: relative;
+}
+
+#editor {
+     width: 50%; 
+    height: calc(100vh - 60px); /* ヘッダー分を除いた高さ */
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+#preview {
+    width: 50%;
+    height: calc(100vh - 60px); /* ヘッダー分を除いた高さ */
+    padding: 10px;
+    overflow-y: auto;
+    background-color: #fff;
+    border-left: 1px solid #ccc;
+    overflow-y: scroll;
+    scrollbar-width: auto;
+}
+
+/* アウトライン*/
+#outline-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#outline li {
+    margin: 5px 0;
+    cursor: pointer;
+    font-size:12px;
+}
+
+/* プレビュー */
+h1{font-size:2.0em; color:#9b4dca;border-bottom:1px solid #cccccc;}
+h2{font-size:1.6em;}
+h3{font-size:1.4em;}
+li { line-height:110%;}
+

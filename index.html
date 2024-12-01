@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdownエディタ</title>
+    <link rel="stylesheet" href="milligram-1.4.1/milligram.min.css">
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.16.0/ace.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div id="editor-container">
+        <aside id="outline">
+          <ul id="outline-list"></ul>
+        </aside>
+        <main id="main-editor">
+            <header>
+                <button id="open-file">ファイルを開く</button>
+                <button id="save-file">保存</button>
+                <input type="file" id="file-input" accept=".md, .txt" hidden>
+            </header>
+            <div id="editor-preview-container">
+                <div id="editor"></div>
+                <div id="preview"></div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
