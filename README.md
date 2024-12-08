@@ -4,4 +4,4 @@
 
 # 使用したもの
 - エディタ：Ace
-- Markdownパーサ：Maker
+- Markdownパーサ：Marked
