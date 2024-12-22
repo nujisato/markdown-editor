@@ -12,22 +12,28 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/markdown/markdown.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/javascript/javascript.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/selection/active-line.js"></script>
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/search/searchcursor.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/scroll/annotatescrollbar.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/search/matchesonscrollbar.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/dialog/dialog.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/search/search.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/search/jump-to-line.js"></script>
-  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/hint/show-hint.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/codemirror/5.65.5/addon/hint/show-hint.css">
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/xml/xml.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/css/css.min.js"></script>
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/fold/foldgutter.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/lib/codemirror.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/xq-light.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/monokai.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/mdn-like.css">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/search/search.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/search/jump-to-line.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/search/searchcursor.js"></script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/scroll/annotatescrollbar.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/search/matchesonscrollbar.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/search/matchesonscrollbar.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/dialog/dialog.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/dialog/dialog.css">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -53,6 +59,7 @@
     .container {
       display: flex;
       flex: 1;
+     overflow-y: hidden; overflow-x: hidden;
     }
 
     .sidebar, .outline {
@@ -66,6 +73,7 @@
       flex: 1;
       display: flex;
       flex-direction: column;
+      overflow-y:  auto; overflow-x: auto;
     }
 
     #preview {
@@ -97,6 +105,22 @@
         .CodeMirror h1, .CodeMirror h2, .CodeMirror h3, .CodeMirror h4, .CodeMirror h5, .CodeMirror h6 {
       font-size: 1.4em;
       font-weight: bold;
+    }
+    .CodeMirror-scroll  {
+     overflow-y: auto;
+    }
+    .outline-level-1{
+     color:#c71585;
+     font-weight: bold;
+     font-size:1.0em;
+    }
+    .outline-level-2{
+    color:#ff7f50;
+    font-size:1.0em;
+    }
+    .outline-level-3, .outline-level-4, .outline-level-5{
+    color:#bc8f8f;
+    font-size:0.9em;
     }
   </style>
 </head>
@@ -146,11 +170,14 @@
     document.querySelector('header').appendChild(clearStorageButton);
     
 
-    const editor = CodeMirror.fromTextArea(editorElement, {
+    const editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
       mode: 'markdown',
       lineNumbers: true,
       lineWrapping: true,
       foldGutter: true,
+      extraKeys: {
+    "Ctrl-F": "findPersistent", // Ctrl+Fで検索窓を表示
+  },
       gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
       styleActiveLine: true, 
       theme: 'default'
@@ -164,12 +191,22 @@
     const updateOutline = () => {
       const content = editor.getValue();
       const headings = content.match(/^#{1,6} .+/gm) || [];
-      outlineElement.innerHTML = headings.map((h, i) => `<div data-index="${i}">${h}</div>`).join('');
+      outlineElement.innerHTML = headings.map((h, i) => {
+         const level = h.match(/^#+/)[0].length;
+         const text = h.replace(/^#+\s*/, '');
+         //h.replace(/^#+\s*/, '');
+        const colorClass = `outline-level-${level}`;
+        const hashes = '#'.repeat(level); // Match the number of #
+        return `<div class="outline-item ${colorClass}" data-index="${i}">${hashes} ${text}</div>`;
+      }).join('');
+
       Array.from(outlineElement.children).forEach((child, index) => {
         child.addEventListener('click', () => {
-          const position = editor.getSearchCursor(headings[index]).from();
-          editor.scrollIntoView({ line: position.line, ch: position.ch });
-          editor.setCursor(position);
+          const cursor = editor.getSearchCursor(headings[index]);
+          if (cursor.findNext()) {
+            editor.scrollIntoView(cursor.from(), 100);
+            editor.setCursor(cursor.from());
+          }
         });
       });
     };
@@ -254,7 +291,7 @@
       if (memos[title]) {
         delete memos[title];
         localStorage.setItem('markdownMemos', JSON.stringify(memos));
-        alert(`Memo '${title}' deleted!`);
+        alert(` '${title}' を削除しました。`);
         renderMemoList();
       }
     };
