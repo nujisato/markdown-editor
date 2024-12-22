@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown Editor</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/fold/foldcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/fold/foldgutter.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/fold/markdown-fold.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/markdown/markdown.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/javascript/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/xml/xml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/css/css.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/fold/foldgutter.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    header {
+      background-color: #f5f5f5;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ccc;
+    }
+
+    header button {
+      margin-left: 10px;
+    }
+
+    .container {
+      display: flex;
+      flex: 1;
+    }
+
+    .sidebar, .outline {
+      width: 20%;
+      border-right: 1px solid #ccc;
+      padding: 10px;
+      overflow-y: auto;
+    }
+
+    .editor {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #preview {
+      flex: 1;
+      padding: 10px;
+      border-top: 1px solid #ccc;
+      overflow-y: auto;
+      display: none;
+    }
+
+    .CodeMirror {
+      flex: 1;
+    }
+
+    .memo-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .memo-item button {
+      background: none;
+      border: none;
+      color: red;
+      cursor: pointer;
+    }
+        .CodeMirror h1, .CodeMirror h2, .CodeMirror h3, .CodeMirror h4, .CodeMirror h5, .CodeMirror h6 {
+      font-size: 1.4em;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <button id="save">Save</button>
+      <button id="export">Export</button>
+      <button id="clearEditor">Clear</button>
+    </div>
+    <button id="togglePreview">Preview</button>
+  </header>
+
+  <div class="container">
+    <div class="sidebar" id="memoList">Memo List</div>
+    <div class="outline" id="outline">Outline</div>
+    <div class="editor">
+      <textarea id="editor"></textarea>
+      <div id="preview"></div>
+    </div>
+  </div>
+
+  <script>
+    const editorElement = document.getElementById('editor');
+    const previewElement = document.getElementById('preview');
+    const memoListElement = document.getElementById('memoList');
+    const outlineElement = document.getElementById('outline');
+    const loadButton = document.getElementById('load');
+    const saveButton = document.getElementById('save');
+    const exportButton = document.getElementById('export');
+    const clearEditorButton = document.getElementById('clearEditor');
+    const togglePreviewButton = document.getElementById('togglePreview');
+
+    const editor = CodeMirror.fromTextArea(editorElement, {
+      mode: 'markdown',
+      lineNumbers: true,
+      lineWrapping: true,
+      foldGutter: true,
+      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+    });
+
+    const updateOutline = () => {
+      const content = editor.getValue();
+      const headings = content.match(/^#{1,6} .+/gm) || [];
+      outlineElement.innerHTML = headings.map((h, i) => `<div data-index="${i}">${h}</div>`).join('');
+      Array.from(outlineElement.children).forEach((child, index) => {
+        child.addEventListener('click', () => {
+          const position = editor.getSearchCursor(headings[index]).from();
+          editor.scrollIntoView({ line: position.line, ch: position.ch });
+          editor.setCursor(position);
+        });
+      });
+    };
+
+    const updatePreview = () => {
+      previewElement.innerHTML = marked.parse(editor.getValue());
+    };
+
+    editor.on('change', () => {
+      updateOutline();
+      if (previewElement.style.display === 'block') {
+        updatePreview();
+      }
+    });
+
+    saveButton.addEventListener('click', () => {
+      const content = editor.getValue();
+      const title = content.split('\n')[0] || 'Untitled';
+      const memos = JSON.parse(localStorage.getItem('markdownMemos') || '{}');
+      memos[title] = content;
+      localStorage.setItem('markdownMemos', JSON.stringify(memos));
+      alert('Memo saved!');
+      renderMemoList();
+    });
+
+    exportButton.addEventListener('click', () => {
+      const content = editor.getValue();
+      const title = content.split('\n')[0] || 'Untitled';
+      const blob = new Blob([content], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${title}.md`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    togglePreviewButton.addEventListener('click', () => {
+      if (previewElement.style.display === 'block') {
+        previewElement.style.display = 'none';
+      } else {
+        updatePreview();
+        previewElement.style.display = 'block';
+      }
+    });
+    
+    clearEditorButton.addEventListener('click', () => {
+      editor.setValue('');
+      alert('Editor cleared!');
+    });
+    const renderMemoList = () => {
+      const memos = JSON.parse(localStorage.getItem('markdownMemos') || '{}');
+      memoListElement.innerHTML = Object.keys(memos).map(title => `
+        <div class="memo-item">
+          <span>${title}</span>
+          <button onclick="deleteMemo('${title}')">×</button>
+        </div>
+      `).join('');
+      Array.from(memoListElement.querySelectorAll('.memo-item span')).forEach(child => {
+        child.addEventListener('click', () => {
+          const title = child.textContent;
+          editor.setValue(memos[title]);
+        });
+      });
+    };
+
+    const deleteMemo = (title) => {
+      const memos = JSON.parse(localStorage.getItem('markdownMemos') || '{}');
+      if (memos[title]) {
+        delete memos[title];
+        localStorage.setItem('markdownMemos', JSON.stringify(memos));
+        alert(`Memo '${title}' deleted!`);
+        renderMemoList();
+      } else {
+        alert('Memo not found!');
+      }
+    };
+
+    // Initialize with saved content if available
+    const savedContent = localStorage.getItem('markdownContent') || '';
+    editor.setValue(savedContent);
+    renderMemoList();
+    updateOutline();
+  </script>
+</body>
+</html>
