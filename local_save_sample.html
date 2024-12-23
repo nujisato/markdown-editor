@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Markdown Editor</title>
+  <title>CodeMirror MD Editor</title>
+  <meta name="description" content="サンプルです。HTML+JS+CodeMirror" />
+  <meta name="keywords" content="HTML,CSS,Javascript,Markdown-Editor" />
+  <meta name="author" content="huzisato" />
+  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/fold/foldcode.min.js"></script>
@@ -86,8 +90,28 @@
 
     .CodeMirror {
       flex: 1;
+      line-height:1.6;
     }
-
+    .cm-header{
+    }
+    .cm-header-1{
+      font-size:1.8em;
+    }
+      .cm-header-2{
+      font-size:1.6em;
+    }
+     .cm-header-3{
+      font-size:1.4em;
+    }
+     .cm-header-4{
+      font-size:1.4em;
+    }
+         .cm-header-5{
+      font-size:1.2em;
+    }
+     .cm-header-6{
+      font-size:1.0em;
+    }
     .memo-item {
       display: flex;
       justify-content: space-between;
@@ -102,21 +126,18 @@
       color: red;
       cursor: pointer;
     }
-        .CodeMirror h1, .CodeMirror h2, .CodeMirror h3, .CodeMirror h4, .CodeMirror h5, .CodeMirror h6 {
-      font-size: 1.4em;
-      font-weight: bold;
-    }
+
     .CodeMirror-scroll  {
      overflow-y: auto;
     }
     .outline-level-1{
      color:#c71585;
      font-weight: bold;
-     font-size:1.0em;
+     font-size:0.9em;
     }
     .outline-level-2{
     color:#ff7f50;
-    font-size:1.0em;
+    font-size:0.9em;
     }
     .outline-level-3, .outline-level-4, .outline-level-5{
     color:#bc8f8f;
