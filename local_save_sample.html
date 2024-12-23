@@ -175,6 +175,7 @@
       lineNumbers: true,
       lineWrapping: true,
       foldGutter: true,
+      allowAtxHeaderWithoutSpace: true,
       extraKeys: {
     "Ctrl-F": "findPersistent", // Ctrl+Fで検索窓を表示
   },
@@ -297,8 +298,8 @@
     };
     
     // Initialize with saved content if available
-    const savedContent = localStorage.getItem('markdownContent') || '';
-    editor.setValue(savedContent);
+    const savedContent = localStorage.getItem('markdownMemos') || '';
+     // editor.setValue(savedContent);
     renderMemoList();
     updateOutline();
 
