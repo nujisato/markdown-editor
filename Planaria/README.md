@@ -1,0 +1,2 @@
+# Planaria
+ElectronとCodeMirror5を使用したMarkdownエディタです。
