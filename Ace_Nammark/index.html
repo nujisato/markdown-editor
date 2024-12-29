@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nammark(ΦωΦ)</title>
+
+    <!-- セキュリティーポリシーを指定。Aceライブラリがインラインスタイルを扱うため。 -->
+    <!-- これをコメントアウトしないとAceの折り畳みアイコンが表示されなくなる
+     <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self' 'unsafe-inline';"
+    /> -->
+    <link href="src/milligram-1.4.1/milligram.css" rel="stylesheet" />
+    <link href="src/main.css" rel="stylesheet" />
+    <!-- https://fontawesome.com/-->
+    <link rel="stylesheet" href="src/libs/fontawesome/css/all.min.css">
+    <script src="src/libs/marked/marked.min.js"></script>
+  </head>
+  <body>
+  <div id="container">
+    <header id="header">
+      <button class="btn-primary" id="btnOpen" title="ファイルを開く"><i class="fa-regular fa-folder-open"></i></button>
+      <button class="btn-primary" id="btnSave" title="保存"><i class="fa-regular fa-floppy-disk"></i></button>
+      <button class="btn-primary" id="toggleButton" title="プレビュー"><i class="fa-solid fa-ghost"></i></button>
+      <a href="src/markdown.html" title="Markdownヒント" target="_blank"><i class="fa-brands fa-markdown"></i></a>
+      <a href="#modal" class="modal-open-button" title="Setting"><i class="fa-solid fa-gear"></i></a>
+      
+<!-- ここから設定モーダル -->
+
+      <div class="modal" id="modal">
+        <div class="modal-wrapper">
+            <div class="modal-content">
+            <a href="#" class="close"><i class="fa-solid fa-xmark"></i></a>
+            <h1><i class="fa-solid fa-gear"></i> Setting</h1>
+            <a href="#" ><i class="fa-solid fa-ghost"></i></a>
+            <h2>プレビュー幅</h2>
+              <p>
+                <button onclick="changeWidth(800)">800px</button>
+                <button onclick="changeWidth(600)">600px</button>
+                <button onclick="changeWidth(400)">400px</button>
+                <input id="customWidth" style="width:130px;" type="number" placeholder="幅を入力(px)" max="1024" min="10">
+                <button onclick="setCustomWidth()">設定</button>
+              </p>
+            </div>
+        </div>
+    </div>
+
+<!-- ここまで設定モーダル -->
+    </header>
+
+     <main id="inputArea"></main> <!-- Aceエディター -->
+     <div id="preview" class="preview wrapper"><section class="container"></section></div> <!-- プレビュー -->
+     <aside id="aside"><ul id="outline-list"></ul></aside> <!-- アウトライン -->
+     <footer id="footer"></footer>
+
+     <script src="node_modules/ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+     <script defer src="src/renderer.js"></script>
+     <script defer src="src/outline.js"></script>
+  </div>
+  </body>
+</html>

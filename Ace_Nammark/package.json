@@ -1,0 +1,33 @@
+{
+  "scripts": {
+    "start": "electron .",
+    "format": "prettier --write 'src/**/*.{html,css,js}' '!src/libs/**'"
+  },
+  "devDependencies": {
+    "electron": "^31.2.0",
+    "electron-builder": "^25.1.8",
+    "electron-packager": "^17.1.2",
+    "prettier": "^2.6.2"
+  },
+  "private": true,
+  "name": "Nam-mark",
+  "version": "1.0.0",
+  "description": "Markdown Editor(ΦωΦ)",
+  "main": "main.js",
+  "keywords": [],
+  "author": "huzisato",
+  "build": {
+    "appId": "nujisato.app.my",
+    "win": {
+      "target": "portable",
+      "icon":"icon.png"
+    }
+  },
+  "license": "ISC",
+  "dependencies": {
+    "ace-builds": "^1.36.5",
+    "asar": "^3.2.0",
+    "marked": "^15.0.3",
+    "yarn": "^1.22.22"
+  }
+}

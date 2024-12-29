@@ -1,0 +1,170 @@
+
+* {
+  margin: 0px;
+  padding: 0px;
+}
+html {
+  height: 100%;
+}
+
+body {
+   height: 100%;
+   margin: 0;
+}
+#container {
+  width: 100%;
+  height: 100%;
+
+  display: grid;
+  grid-template-columns: 200px 1fr; /*横のグリッド指定*/
+  grid-template-rows: 30px 1fr 30px; /*縦のグリッド指定*/
+
+  scrollbar-color: #948585 #ffffff ;
+}
+
+li {
+  line-height:120%;
+}
+
+#header {
+   background-color:#564a4d;
+   grid-column-start: 1;
+   grid-column-end: 4;
+   grid-row-start: 1;
+   grid-row-end: 2;
+   padding: 4px 10px;
+}
+
+#header a{
+  color:#ffffff;
+}
+
+#inputArea {
+  grid-column-start: auto;
+  grid-column-end: auto;
+  grid-row-start: 2;
+  grid-row-end: auto;
+  overflow: hidden;
+}
+
+.preview {
+  display: none; /* 初期状態は非表示 */
+  width:500px;
+  padding:20px;
+  background-color: #efecf4;
+  overflow-y: scroll;
+}
+
+.setting {
+  display: none; /* 初期状態は非表示 */
+  background-color: #ffffff;
+}
+.setting h1{
+  font-size:2em;
+}
+.setting h2{
+  font-size:1.2em;
+}
+
+#aside {
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  background-color:#ffffff; 
+  color:#888888;
+  font-size:1.6rem;
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 2;
+  grid-row-end: 3;
+  padding:10px;
+}
+#aside li{
+ list-style: none;
+ line: height 100%;
+}
+
+#footer {
+  background-color:#564a4d;
+  grid-column-start: 1;
+  grid-column-end: 4;
+  grid-row-start: 3;
+  grid-row-end: auto;
+
+  color: #ffffff;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
+}
+
+.btn-primary {
+  -webkit-appearance: button;
+  color: #ffffff;
+  background-color: transparent;
+  border: 0px;
+  border-radius: 0rem;
+  padding: 0rem 0.4rem;
+  margin:0px;
+  line-height: 100%;
+  font-weight: normal;
+  height: 2rem;
+  font-size: 2rem;
+}
+.btn-primary :hover{
+ color: #ccc;
+}
+
+/* モーダル表示 */
+
+.modal-open-button {
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(0 0 0 / 60%);
+  opacity: 0;
+  transition: opacity 0.5s, scale 0s 0.5s;
+  scale: 0;
+}
+
+.modal:target {
+  opacity: 1;
+  transition: opacity 0.5s;
+  scale: 1;
+}
+
+.modal-wrapper {
+  position: relative;
+  width: 80%;
+  max-width: 600px;
+  max-height: 70%;
+  padding: 20px;
+  margin: auto;
+  overflow: scroll;
+  background-color: #FEFEFE;
+  border-radius: 5px;
+  transition: transform 0.5s;
+  transform: translateY(-200%);
+  overflow-x: hidden;
+}
+
+.modal:target .modal-wrapper {
+  transform: translateY(0%);
+}
+#modal .close{
+color:#000000; 
+font-size:24px;
+position: absolute; right: 15px;
+}
+
