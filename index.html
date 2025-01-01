@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Planaria</title>
+  <link rel="stylesheet" href="src/spectre-0.5.9/dist/spectre.min.css">
+  <link rel="stylesheet" href="src/spectre-0.5.9/dist/spectre-exp.min.css">
+  <link rel="stylesheet" href="src/spectre-0.5.9/dist/spectre-icons.min.css">
+  <link rel="stylesheet" href="src/MingCute-main/fonts/MingCute.css">
+  <script src="node_modules/split.js/dist/split.min.js"></script>
+
+  <!-- codemirror本体 -->
+  <script src="node_modules/codemirror/lib/codemirror.js"></script>
+  <link rel="stylesheet" href="node_modules/codemirror/lib/codemirror.css">
+  <script src="node_modules/marked/marked.min.js"></script>
+  <!-- codemirrorのモジュール追加 -->
+  <script src="node_modules/codemirror/addon/fold/foldcode.js"></script>
+  <script src="node_modules/codemirror/addon/fold/foldgutter.js"></script>
+  <script src="node_modules/codemirror/addon/fold/markdown-fold.js"></script>
+  <script src="node_modules/codemirror/mode/markdown/markdown.js"></script>
+  <script src="node_modules/codemirror/mode/javascript/javascript.js"></script>
+  <script src="node_modules/codemirror/addon/selection/active-line.js"></script>
+  <script src="node_modules/codemirror/addon/hint/show-hint.js"></script>
+  <link rel="stylesheet" href="node_modules/codemirror/addon/hint/show-hint.css">
+  <script src="node_modules/codemirror/mode/xml/xml.js"></script>
+  <script src="node_modules/codemirror/mode/css/css.js"></script>
+  <link rel="stylesheet" href="node_modules/codemirror/addon/fold/foldgutter.css">
+  <script src="node_modules/codemirror/addon/scroll/simplescrollbars.js"></script>
+
+  <script src="node_modules/codemirror/addon/search/search.js"></script>
+  <script src="node_modules/codemirror/addon/search/jump-to-line.js"></script>
+  <script src="node_modules/codemirror/addon/search/searchcursor.js"></script>
+  
+  <script src="node_modules/codemirror/addon/scroll/annotatescrollbar.js"></script>
+  <script src="node_modules/codemirror/addon/search/matchesonscrollbar.js"></script>
+  <link rel="stylesheet" href="node_modules/codemirror/addon/search/matchesonscrollbar.css">
+  <script src="node_modules/codemirror/addon/dialog/dialog.js"></script>
+  <link rel="stylesheet" href="node_modules/codemirror/addon/dialog/dialog.css">
+  <script src="node_modules/codemirror-search-replace/src/search.js"></script>
+
+  <!-- codemirrorのTheme読み込み ライトテーマ -->
+  <link rel="preload" as="style" href="./src/planaria_light.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/base16-light.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/duotone-light.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/eclipse.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/elegant.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/idea.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/juejin.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/mdn-like.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/neat.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/neo.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/xq-light.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/yeti.css" onload="this.rel='stylesheet'">
+  <!-- codemirrorのTheme読み込み ダークテーマ -->
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/abbott.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/abcdef.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/ambiance.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/ayu-dark.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/ayu-mirage.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/base16-dark.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/bespin.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/blackboard.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/cobalt.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/darcula.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/dracula.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/duotone-dark.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/gruvbox-dark.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/lesser-dark.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/liquibyte.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/lucario.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/material.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/mbo.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/midnight.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/monokai.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/moxer.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/nord.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/oceanic-next.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/panda-syntax.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/paraiso-dark.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/shadowfox.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/solarized.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/twilight.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/vibrant-ink.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/xq-dark.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/yonce.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/zenburn.css" onload="this.rel='stylesheet'">
+
+  <!-- カスタマイズ用style読み込み -->
+  <link rel="stylesheet" href="src/style.css">
+  <link rel="stylesheet" href="src/customcss.css">
+
+</head>
+<body>
+  <header class="navbar">
+    <section class="navbar-section">
+        <div class="btn-group  btn-group-block" role="group">
+          <button class="btn tooltip tooltip-bottom" data-tooltip="New" id="newFile"><span id="like" class="mgc_file_new_line"></span></button>
+          <button class="btn tooltip tooltip-bottom" data-tooltip="Open file" id="openFile"><span id="like" class="mgc_folder_open_line"></span></button>
+          <button class="btn tooltip tooltip-bottom" data-tooltip="Save As file" id="saveAsFile"><span id="like" class="mgc_save_2_line"></span></button>
+          <button class="btn tooltip tooltip-bottom" data-tooltip="Save file" id="saveFile"><span id="like" class="mgc_save_2_fill"></span></button>
+          <button class="btn tooltip tooltip-bottom" data-tooltip="undo" id="undo"><span id="like" class="mgc_back_2_line"></span></button>
+          <button class="btn tooltip tooltip-bottom" data-tooltip="redo" id="redo"><span id="like" class="mgc_forward_2_line"></span></button>
+        </div>
+    </section>
+    <section class="navbar-section">
+      <div class="btn-group  btn-group-block" role="group">
+        <button class="btn" id="toggleOutline"><span id="like" class="mgc_layout_left_line"></span></button>
+        <button class="btn" id="togglePreview"><span id="like" class="mgc_layout_right_line"></span></button>
+        <button class="btn" id="toggleMode"><span id="like" class="mgc_moonlight_fill"></span></button>
+      </div>
+    </section>
+  </header>
+  <div class="page-wrapper">
+    <div id="editor-container">
+      <div id="outline" class="outline">outline</div>
+      <div id="editor"></div>
+      <div id="preview"></div>
+    </div>
+  </div>
+  <script src="src/renderer.js"></script>
+
+<div class="toast toast-primary">
+  <!-- toast -->
+</div>
+
+  <!-- 設定画面モーダル -->
+  <div class="modal modal-lg" id="setting_modal">
+    <a href="#close" class="modal-overlay" aria-label="Close"></a>
+    <div class="modal-container">
+      <div class="modal-header">
+        <a href="#close" class="btn btn-clear float-right" aria-label="Close"></a>
+        <div class="modal-title h3">Setting</div>
+      </div>
+      <div class="modal-body">
+        <div class="content">
+          <div class="modal-title h4">Style</div>
+          <form class="form-horizontal">
+            <div class="form-group">
+              <div class="col-4 col-sm-12">
+                <label>Light Theme</label>
+              </div>
+              <div class="col-8 col-sm-12">
+                <select class="form-select" id="L-theme"> <!-- ライトテーマ選択 -->>
+                  <option value="default">default</option>
+                  <option value="planaria_light">planaria_light</option>
+                  <option value="base16-light">base16-light</option>
+                  <option value="duotone-light">duotone-light</option>
+                  <option value="eclipse">eclipse</option>
+                  <option value="elegant">elegant</option>
+                  <option value="idea">idea</option>
+                  <option value="juejin">juejin</option>
+                  <option value="mdn-like">mdn-like</option>
+                  <option value="neat">neat</option>
+                  <option value="neo">neo</option>
+                  <option value="xq-light">xq-light</option>
+                  <option value="yeti">yeti</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-4 col-sm-12">
+                <label>Dark Theme</label>
+              </div>
+              <div class="col-8 col-sm-12">
+                <select class="form-select" id="D-theme"> <!-- ダークテーマ選択 -->>
+                  <option value="dracula">default（dracula）</option>
+                  <option value="abbott">abbott</option>
+                  <option value="abcdef">abcdef</option>
+                  <option value="ambiance">ambiance</option>
+                  <option value="ayu-dark">ayu-dark</option>
+                  <option value="ayu-mirage">ayu-mirage</option>
+                  <option value="base16-dark">base16-dark</option>
+                  <option value="bespin">bespin</option>
+                  <option value="blackboard">blackboard</option>
+                  <option value="cobalt">cobalt</option>
+                  <option value="darcula">darcula</option>
+                  <option value="dracula">dracula</option>
+                  <option value="duotone-dark">duotone-dark</option>
+                  <option value="gruvbox-dark">gruvbox-dark</option>
+                  <option value="lesser-dark">lesser-dark</option>
+                  <option value="liquibyte">liquibyte</option>
+                  <option value="lucario">lucario</option>
+                  <option value="material">material</option>
+                  <option value="mbo">mbo</option>
+                  <option value="midnight">midnight</option>
+                  <option value="monokai">monokai</option>
+                  <option value="moxer">moxer</option>
+                  <option value="nord">nord</option>
+                  <option value="oceanic-next">oceanic-next</option>
+                  <option value="panda-syntax">panda-syntax</option>
+                  <option value="paraiso-dark">paraiso-dark</option>
+                  <option value="shadowfox">shadowfox</option>
+                  <option value="solarized">solarized</option>
+                  <option value="twilight">twilight</option>
+                  <option value="vibrant-ink">vibrant-ink</option>
+                  <option value="xq-dark">xq-dark</option>
+                  <option value="yonce">yonce</option>
+                  <option value="zenburn">zenburn</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-4 col-sm-12">
+                <label>Local Storage</label>
+              </div>
+              <div class="col-8 col-sm-12">
+                  <p>設定はlocal storageに保存され、次回起動時に反映されます。<br>
+                  削除は取り消せません。</p>
+                  <button id="reset-button" class="btn">データを全て削除する</button>
+                  
+
+              </div>
+            </div>
+
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="setting_save" class="btn btn-primary">Save</button>
+        <a class="btn btn-link" href="#modals">Close</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ヘルプ画面モーダル -->
+  <div class="modal modal-lg" id="help_modal">
+    <a href="#close" class="modal-overlay" aria-label="Close"></a>
+    <div class="modal-container">
+      <div class="modal-header">
+        <a href="#close" class="btn btn-clear float-right" aria-label="Close"></a>
+        <div class="modal-title h3">License</div>
+      </div>
+      <div class="modal-body">
+        <div class="content">
+          <div class="container">
+            <div class="columns">
+              <div class="column col-auto"><img src="./src/icon.png" class="img-responsive" width="100px"></div>
+              <div class="column col-auto">
+                <div class="modal-title h4">Planaria</div>
+                Copyright © 2024 huzisato<br>
+                This application is provided under the following licenses:<br>
+                <a href="https://opensource.org/license/mit" target="_blank">MIT License</a>
+              </div>
+            </div>
+          </div>
+          <div class="modal-title h4">Website</div>
+          <ul>
+            <li><a class="mgc_twitter_line" href="https://x.com/huzisato" target="_blank" id="like">twitter @huzisato</a></li>
+            <li><a class="mgc_github_line" href="https://github.com/nujisato" target="_blank" id="like">github</a>
+          </ul>
+          <div class="modal-title h5">js</div>
+          <ul>
+            <li>Markdown purser：<a href="https://marked.js.org/" target="_blank">Marked</a></li>
+            <li>Editor：<a href="https://codemirror.net/" target="_blank">CodeMirror</a></li>
+            <ul>
+              <li><a href="https://github.com/zhuhs/codemirror-search-replace" target="_blank">codemirror-search-replace</li>
+            </ul>
+          <li><a href="https://split.js.org/" target="_blank">Split.js</a></li>
+          </ul>
+          <div class="modal-title h5">CSS ＆ Icon</div>
+          <ul>
+            <li>CSS framework：<a href="https://picturepan2.github.io/spectre/index.html" target="_blank">Spectre.CSS</a></li>
+            <li>Icon font：<a href="https://www.mingcute.com/" target="_blank">MingCute</a></li>
+            <li>Icon：<a href="https://icooon-mono.com/" target="_blank">ICOOON MONO</a></li>
+          </ul>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-link" href="#modals">Close</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer filename">
+      <a class="footer_button mgc_settings_4_line" href="#setting_modal" id="like"></a>
+      <a class="footer_button mgc_information_line" href="#help_modal" id="like"></a>
+      <span id="like" class="mgc_document_2_fill"></span>
+      <span id="fileName"></span>
+    </div>
+  </footer>
+
+</body>
+</html>
