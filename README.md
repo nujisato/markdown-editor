@@ -17,6 +17,7 @@ Ace_Nammarkフォルダ内に格納
 Planariaフォルダ内に格納
 
 ### Planaria
+Electron+Codemirror5
 ![image](./Planaria/src/icon.png)  
 コードエディタに近い操作感のMarkdownエディタを目指して作成  
 変な改行が入らない  
