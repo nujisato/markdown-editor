@@ -14,8 +14,6 @@ Exportボタンからmd形式でダウンロードします。
 Ace_Nammarkフォルダ内に格納
 
 ## Electron+Codemirror5
-Planariaフォルダ内に格納
-
 ### Planaria
 Electron+Codemirror5  
 <img src="./Planaria/src/icon.png" width="200">  
