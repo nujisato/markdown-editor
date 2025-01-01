@@ -1,0 +1,14 @@
+# MingCuteの使い方
+CSSを指定
+<link rel="stylesheet" href="MingCute-main/fonts/MingCute.css">
+
+アイコンを表示したいところに以下を入力
+<span id="like" class="mgc_file_line"></span>
+class内でアイコンを指定している
+class="mgc_{ここに名前}_line"
+
+<span class="mgc_search_fill"></span>
+こう書くと線と白抜きの部分が反転で表示
+
+アイコンの名前は以下で検索
+https://www.mingcute.com/
