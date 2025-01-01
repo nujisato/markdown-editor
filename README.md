@@ -16,7 +16,7 @@ Ace_Nammarkフォルダ内に格納
 ## Electron+Codemirror5
 ### Planaria
 Electron+Codemirror5  
-<img src="./Planaria/src/icon.png" width="200">  
+<img src="./Planaria/src/icon.png" width="100px">  
 コードエディタに近い操作感のMarkdownエディタを目指して作成  
 変な改行が入らない  
 アウトライン表示とプレビューができます。それぞれ表示をオンオフ可能
