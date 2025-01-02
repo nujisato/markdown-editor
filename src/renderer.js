@@ -15,6 +15,7 @@ let editor = CodeMirror(editorContainer, {
   lineWrapping: true,// テキストの折返しを有効化
   foldGutter: true, //折り畳みを有効化
   allowAtxHeaderWithoutSpace: true,
+  dragDrop:true,
   scrollbarStyle: 'overlay',
   extraKeys: {
 "Ctrl-F": "findPersistent", // Ctrl+Fで検索窓を表示
@@ -34,7 +35,7 @@ editor.on('change', () => {
 //markedでプレビュー生成
 const updatePreview = () => {
   marked.setOptions({
-    breaks: true, // 改行を有効化
+    breaks: true, // 改行を有効化するか
   });
   previewContainer.innerHTML = marked.parse(editor.getValue()); 
 
@@ -50,7 +51,6 @@ const updatePreview = () => {
     });
   });
 }
-
 //アウトライン生成
 const updateOutline = () => {
   const content = editor.getValue();
@@ -103,6 +103,7 @@ function updateFileName(filePath) {
 
 ///開くボタン
 document.getElementById('openFile').addEventListener('click', async () => {
+  document.activeElement.blur();//フォーカスを外す
   if (isUnsaved) {
     const shouldProceed = confirm('保存されていない変更があります。続行しますか？');
     if (!shouldProceed) return;
@@ -116,11 +117,11 @@ document.getElementById('openFile').addEventListener('click', async () => {
     updateOutline(content);
   }
   resetUnsavedFlag(); // フラグをリセット
-  document.activeElement.blur();//フォーカスを外す
 });
 
 ///上書き保存ボタン
 document.getElementById('saveFile').addEventListener('click', async () => {
+  document.activeElement.blur();//フォーカスを外す
   if (currentFilePath) {
     const content = editor.getValue();
     await window.electronAPI.saveFile(currentFilePath, content); // ファイルパスを指定して保存
@@ -130,11 +131,11 @@ document.getElementById('saveFile').addEventListener('click', async () => {
     // 上書き保存ができない場合、別名保存を促す
     document.getElementById('saveAsFile').click();
   }
-  document.activeElement.blur();//フォーカスを外す
 });
 
 ///別名で保存ボタン
 document.getElementById('saveAsFile').addEventListener('click', async () => {
+  document.activeElement.blur();//フォーカスを外す
   const content = editor.getValue();
   const filePath = await window.electronAPI.saveAsFile(content);
   if (filePath) {
@@ -143,7 +144,6 @@ document.getElementById('saveAsFile').addEventListener('click', async () => {
     createToast("名前をつけて保存しました");
     updateFileName(filePath);   // ファイル名を更新
   }
-  document.activeElement.blur();//フォーカスを外す
 });
 
 //エディタ用ツール
@@ -160,27 +160,49 @@ document.getElementById('redo').addEventListener('click', () => {
 //メニュー右側
 ///ローカルストレージから設定をロード
 document.addEventListener('DOMContentLoaded', function () { 
-  let LthemeSelector = localStorage.getItem('LthemeSelector') || 'default';
-  let DthemeSelector = localStorage.getItem('DthemeSelector') || 'dracula';
+  let LthemeSelector = localStorage.getItem('LthemeSelector') || 'default'; //ライトモードテーマ
+  let DthemeSelector = localStorage.getItem('DthemeSelector') || 'dracula'; //ダークモードテーマ
+  let Mode = localStorage.getItem('Mode-set') || null; //モード
+  let HeadSelector = localStorage.getItem('Headline') || null; //見出しの大きさを反映するか
 
+  console.log('ロードしました。:', LthemeSelector, DthemeSelector, Mode, HeadSelector);
+  
   // 初期設定
   previewContainer.classList.add('hidden'); // デフォルトでプレビューを非表示
   const codeMirrorWrapper = editor.getWrapperElement(); //エディタ本体のスタイル指定
-  
+
+  //ロードした設定を反映
+    if (Mode == "dark-mode") {
+      const body = document.body;
+      document.body.classList.toggle('dark-mode'); // モード切替
+      editor.setOption('theme', DthemeSelector); //モードに合わせてテーマ適用
+  } else {
+      editor.setOption('theme', LthemeSelector); //モードに合わせてテーマ適用
+  }
+
+ //見出しの大きさ:trueならcssを反映
+ const headlineStylesheet = document.getElementById("Headline");
+  if (HeadSelector == "true") { 
+    const headlineLink = document.getElementById('Headline');
+    headlineStylesheet.disabled = false; 
+  } else  {
+    const headlineLink = document.getElementById('Headline');
+    headlineStylesheet.disabled = true; 
+  }
+ 
   // 値をフォームに適用
   document.getElementById('L-theme').value = LthemeSelector;
   document.getElementById('D-theme').value = DthemeSelector;
+  const checkbox = document.getElementById("set_headline");
+  if (HeadSelector) {
+    checkbox.checked = true;
+  }else{
+    checkbox.checked = false;
+  }
 
   // 表示をアップデート
   updatePreview();
   updateOutline();
-
-  // 初回ロード時に現在のモードに基づいてテーマを適用
-    if (document.body.classList.contains('dark-mode')) {
-      editor.setOption('theme', DthemeSelector);
-  } else {
-      editor.setOption('theme', LthemeSelector);
-  }
 
   // モード切替ボタンの処理
   toggleModeButton.addEventListener('click', () => {
@@ -190,11 +212,15 @@ document.addEventListener('DOMContentLoaded', function () {
     if (body.classList.contains('dark-mode')) {
         // ダークテーマに変更
         editor.setOption('theme', DthemeSelector);
+        localStorage.setItem('Mode-set', "dark-mode"); //ローカルストレージに保存
         console.log('ダークテーマに変更:', DthemeSelector);
+        console.log('現在のモード:', "dark-mode");
     } else {
         // ライトテーマに変更
         editor.setOption('theme', LthemeSelector);
+        localStorage.setItem('Mode-set', "null");//ローカルストレージに保存
         console.log('ライトテーマに変更:', LthemeSelector);
+        console.log('現在のモード:', "null");
     }
   document.activeElement.blur();//フォーカスを外す
   });
@@ -205,10 +231,16 @@ document.addEventListener('DOMContentLoaded', function () {
     // 入力値を取得
     LthemeSelector = document.getElementById('L-theme').value;
     DthemeSelector = document.getElementById('D-theme').value;
+    if (set_headline.checked){
+      HeadSelector = "true"
+    } else {
+      HeadSelector = "false"
+    }
 
     // ローカルストレージに保存
     localStorage.setItem('LthemeSelector', LthemeSelector);
     localStorage.setItem('DthemeSelector', DthemeSelector);
+    localStorage.setItem('Headline', HeadSelector);
 
     // 設定確認
     console.log('ライトテーマ:', LthemeSelector);
@@ -217,8 +249,20 @@ document.addEventListener('DOMContentLoaded', function () {
     // 現在のモードに基づいてテーマを適用
       if (document.body.classList.contains('dark-mode')) {
         editor.setOption('theme', DthemeSelector);
+        localStorage.setItem('Mode-set', "dark-mode");//ローカルストレージに保存
     } else {
         editor.setOption('theme', LthemeSelector);
+        localStorage.setItem('Mode-set', null);//ローカルストレージに保存
+    }
+
+    //見出しの大きさ:trueならcssを反映
+    const headlineStylesheet = document.getElementById("Headline");
+    if (HeadSelector == "true") { 
+      const headlineLink = document.getElementById('Headline');
+      headlineStylesheet.disabled = false; // 有効化
+    } else  {
+      const headlineLink = document.getElementById('Headline');
+      headlineStylesheet.disabled = true; // 無効化
     }
     const messageDiv = '設定を保存しました。';
     location.href = '#modals';
@@ -257,13 +301,16 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
+//左カラムの開閉
 toggleOutlineButton.addEventListener('click', () => {
-  outlineContainer.classList.toggle('hidden'); //左カラムの開閉
+  outlineContainer.classList.toggle('hidden'); 
+  updateGuttersVisibility();
   document.activeElement.blur();//フォーカスを外す
 });
-
+//右カラムの開閉
 togglePreviewButton.addEventListener('click', () => {
-  previewContainer.classList.toggle('hidden'); //右カラムの開閉
+  previewContainer.classList.toggle('hidden'); 
+  updateGuttersVisibility();
   document.activeElement.blur();//フォーカスを外す
 });
 
@@ -287,6 +334,23 @@ Split(['#outline', '#editor', '#preview'], {
   cursor: 'col-resize'
 });
 
+// 関連するgutterの表示/非表示を更新する
+function updateGuttersVisibility() {
+  const outlineHidden = outlineContainer.classList.contains('hidden');
+  const previewHidden = previewContainer.classList.contains('hidden');
+  const gutters = document.querySelectorAll('.gutter');
+  if (gutters[0]) {// outlineが非表示の場合、左側のgutterを非表示
+    gutters[0].style.display = outlineHidden ? 'none' : 'block';
+  }
+  if (gutters[1]) {// previewが非表示の場合、右側のgutterを非表示
+    gutters[1].style.display = previewHidden ? 'none' : 'block';
+  }
+}
+
+// 初期状態のgutterの表示を設定
+updateGuttersVisibility();
+
+
 // 未保存の処理
 let isUnsaved = false; //未保存フラグ
 editor.on('change', () => {
@@ -296,4 +360,3 @@ editor.on('change', () => {
 function resetUnsavedFlag() {// 保存成功時に未保存フラグをリセット
   isUnsaved = false;
 }
-

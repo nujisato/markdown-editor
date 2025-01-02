@@ -1,24 +1,12 @@
 /* Style Setting */ 
 /* Editor */
 .CodeMirror * {
-    font-family:'Meiryo', sans-serif;
-    font-size:14px;
+  /*none*/
 }
-/* Editor ⇒ header */
-.CodeMirror span.cm-header-1 {
-    font-size:1.6em;
-  }
-.CodeMirror span.cm-header-2 {
-  font-size:1.4em;
-}
-.CodeMirror span.cm-header-3 {
-  font-size:1.2em;
-}
-  
-.CodeMirror span.cm-header-4,
-.CodeMirror span.cm-header-5,
-.CodeMirror span.cm-header-6{
-  font-size:1.0em;
+
+.CodeMirror {
+  font-family:monaco,'Meiryo', sans-serif;
+  font-size:14px;
 }
 
 .CodeMirror span.cm-cursor {
@@ -80,3 +68,4 @@
    #preview tr {
     border-top: solid 1px #a5a5a5;
    }
+

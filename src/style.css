@@ -187,6 +187,8 @@ body.dark-mode .gutter:hover {
   text-overflow: ellipsis;
 
 }
+
+/*画面分割*/
 .gutter {
   background-color:#f7f7f7;
 }
@@ -194,6 +196,8 @@ body.dark-mode .gutter:hover {
   background-color: #ced4da;
   cursor: col-resize;
 }
+
+
 .CodeMirror {
   flex: 1;
   line-height:1.5;
@@ -234,4 +238,3 @@ body.dark-mode .gutter:hover {
   right: 0;
   width: 100%;
 }
-
