@@ -51,6 +51,7 @@
   <link rel="preload" as="style" href="node_modules/codemirror/theme/mdn-like.css" onload="this.rel='stylesheet'">
   <link rel="preload" as="style" href="node_modules/codemirror/theme/neat.css" onload="this.rel='stylesheet'">
   <link rel="preload" as="style" href="node_modules/codemirror/theme/neo.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="node_modules/codemirror/theme/solarized.css" onload="this.rel='stylesheet'">
   <link rel="preload" as="style" href="node_modules/codemirror/theme/xq-light.css" onload="this.rel='stylesheet'">
   <link rel="preload" as="style" href="node_modules/codemirror/theme/yeti.css" onload="this.rel='stylesheet'">
   <!-- codemirrorのTheme読み込み ダークテーマ -->
@@ -80,7 +81,6 @@
   <link rel="preload" as="style" href="node_modules/codemirror/theme/panda-syntax.css" onload="this.rel='stylesheet'">
   <link rel="preload" as="style" href="node_modules/codemirror/theme/paraiso-dark.css" onload="this.rel='stylesheet'">
   <link rel="preload" as="style" href="node_modules/codemirror/theme/shadowfox.css" onload="this.rel='stylesheet'">
-  <link rel="preload" as="style" href="node_modules/codemirror/theme/solarized.css" onload="this.rel='stylesheet'">
   <link rel="preload" as="style" href="node_modules/codemirror/theme/twilight.css" onload="this.rel='stylesheet'">
   <link rel="preload" as="style" href="node_modules/codemirror/theme/vibrant-ink.css" onload="this.rel='stylesheet'">
   <link rel="preload" as="style" href="node_modules/codemirror/theme/xq-dark.css" onload="this.rel='stylesheet'">
@@ -90,6 +90,7 @@
   <!-- カスタマイズ用style読み込み -->
   <link rel="stylesheet" href="src/style.css">
   <link rel="stylesheet" href="src/customcss.css">
+  <link rel="stylesheet" href="src/headline.css" id="Headline">
 
 </head>
 <body>
@@ -154,6 +155,7 @@
                   <option value="mdn-like">mdn-like</option>
                   <option value="neat">neat</option>
                   <option value="neo">neo</option>
+                  <option value="solarized">solarized</option>
                   <option value="xq-light">xq-light</option>
                   <option value="yeti">yeti</option>
                 </select>
@@ -192,7 +194,7 @@
                   <option value="panda-syntax">panda-syntax</option>
                   <option value="paraiso-dark">paraiso-dark</option>
                   <option value="shadowfox">shadowfox</option>
-                  <option value="solarized">solarized</option>
+                  
                   <option value="twilight">twilight</option>
                   <option value="vibrant-ink">vibrant-ink</option>
                   <option value="xq-dark">xq-dark</option>
@@ -204,14 +206,24 @@
 
             <div class="form-group">
               <div class="col-4 col-sm-12">
+                <label>Advanced Settings</label>
+              </div>
+              <div class="col-8 col-sm-12">
+                <label class="form-checkbox">
+                  <input type="checkbox" id="set_headline">
+                  <i class="form-icon"></i> Big Headline
+                </label>
+              </div>
+              
+            </div>
+
+            <div class="form-group">
+              <div class="col-4 col-sm-12">
                 <label>Local Storage</label>
               </div>
               <div class="col-8 col-sm-12">
-                  <p>設定はlocal storageに保存され、次回起動時に反映されます。<br>
-                  削除は取り消せません。</p>
+                  <p>設定はlocal storageに保存され、次回起動時に反映されます。</p>
                   <button id="reset-button" class="btn">データを全て削除する</button>
-                  
-
               </div>
             </div>
 
@@ -274,13 +286,12 @@
       </div>
     </div>
   </div>
-
   <footer>
     <div class="footer filename">
       <a class="footer_button mgc_settings_4_line" href="#setting_modal" id="like"></a>
       <a class="footer_button mgc_information_line" href="#help_modal" id="like"></a>
       <span id="like" class="mgc_document_2_fill"></span>
-      <span id="fileName"></span>
+      <span id="fileName">New File</span>
     </div>
   </footer>
 
